@@ -5,7 +5,6 @@ echo 'usage:'
 echo '  csv2sqlite.sh [XLSXFILE]'
 echo 'example:'
 echo '  csv2sqlite.sh ~/example.xlsx'
-exit
 fi
 # o=$2
 xlsx2csv $1 data.csv -s 1
