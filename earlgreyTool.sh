@@ -1,16 +1,21 @@
 #!/bin/sh
 LogParse(){
   echo 'Log Parse Begin'
-  path='EarlGreyToolLogs'
-  if [ -d ]
   now=$(date +%Y-%m-%d-%T)
-  xcodebuild test -project mobile.xcodeproj -scheme mobile -destination 'platform=iOS Simulator,OS=9.3,name=iPhone 6 Plus' > $now.log
-  headLineNum=$(awk '/========== Detailed Exception ==========/{ print NR;}' $now.log) #find a head
-  endLineNum=$(awk '/ failed \(/{ print NR;}' $now.log) #find end line
+  path=TestLogs
+  fullLogPath=$path/$now.log
+  errorLogPath=$path/error_$now.log
+  echo $(pwd)/$fullLogPath
+  echo $(pwd)/$errorLogPath
+  if [ ! -d $path ]; then
+  mkdir $path
+  fi
+  xcodebuild test -project mobile.xcodeproj -scheme mobile -destination 'platform=iOS Simulator,OS=9.3,name=iPhone 6 Plus' > $fullLogPath
+  headLineNum=$(awk '/========== Detailed Exception ==========/{ print NR;}' $fullLogPath) #find a head
+  endLineNum=$(awk '/ failed \(/{ print NR;}' $fullLogPath) #find end line
   hNums=(${headLineNum//\ / })
   eNums=(${endLineNum//\ / })
-  if ${#hNums}=${#eNums}
-  then
+  if [ ${#hNums} = ${#eNums} ]; then
     echo ${#hNums}
     count=${#eNums[@]}
     for ((i=0;i<count;i++))
@@ -18,7 +23,7 @@ LogParse(){
       # echo loop $i
         for ((n=${hNums[$i]};n<=${eNums[$i]};n++))
           do
-            sed "${n}q;d" $now.log >> error_$now.log
+            sed "${n}q;d" $fullLogPath >> $errorLogPath
           done
       done
   elif ［ ${#hNums}=0 -a [${#eNums}=0 ］
@@ -27,10 +32,9 @@ LogParse(){
   else 
     echo 'read line numbers error'
   fi
-  tail -n 2 $now.log >> error_$now.log 
+  tail -n 2 $fullLogPath >> $errorLogPath 
 }
 
-i=$1
 if [ "$1" = "run" ]; then
 LogParse
 exit

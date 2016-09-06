@@ -30,4 +30,4 @@ echo '.mode column' >> $sql
 echo 'SELECT * FROM data;' >> $sql
 sqlite3 data.sqlite < $sql
 rm $sql
-rm data.csv
+rm data.csvccc 
