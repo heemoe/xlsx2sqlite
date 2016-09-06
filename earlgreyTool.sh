@@ -18,7 +18,7 @@ LogParse(){
   #     # echo loop $i
   #       for ((n=${hNums[$i]};n<=${eNums[$i]};n++))
   #         do
-  #           # num of line : echo $n
+  #             # num of line : echo $n
   #           sed "${n}q;d" $now.log >> error_$now.log
   #         done
   #     done
